@@ -1,0 +1,40 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Country {
+  id      Int     @id @default(autoincrement())
+  name    String  @db.VarChar(60)
+  acronym String  @db.VarChar(2)
+  states  State[]
+
+  @@map("country")
+}
+
+model State {
+  id        Int    @id @default(autoincrement())
+  countryId Int    @map("country_id")
+  name      String @db.VarChar(75)
+  uf        String @db.VarChar(2)
+
+  country Country @relation(fields: [countryId], references: [id])
+  cities  City[]
+
+  @@map("state")
+}
+
+model City {
+  id      Int    @id @default(autoincrement())
+  name    String @db.VarChar(110)
+  stateId Int    @map("state_id")
+
+  state State @relation(fields: [stateId], references: [id])
+
+  @@map("city")
+}
