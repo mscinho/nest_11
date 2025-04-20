@@ -8,6 +8,10 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum HomeScreen {
+  schedule
+  patients
+}
 model Country {
   id      Int     @id @default(autoincrement())
   name    String  @db.VarChar(60)
@@ -34,7 +38,69 @@ model City {
   name    String @db.VarChar(110)
   stateId Int    @map("state_id")
 
-  state State @relation(fields: [stateId], references: [id])
+  state   State    @relation(fields: [stateId], references: [id])
+  persons Person[]
 
   @@map("city")
+}
+
+model Person {
+  id                 Int       @id @default(autoincrement())
+  cityId             Int?      @map("city_id")
+  name               String    @db.VarChar(255)
+  email              String?   @db.VarChar(125)
+  birthDate          DateTime? @map("birth_date")
+  cpf                String?   @db.VarChar(11)
+  rg                 String?   @db.VarChar(20)
+  telephone          String?   @db.VarChar(45)
+  internationalPhone Boolean   @default(false) @map("international_phone")
+  cep                String?   @db.VarChar(9)
+  logradouro         String?   @db.VarChar(255)
+  numero             String?   @db.VarChar(6)
+  neighborhood       String?   @db.VarChar(255)
+  complemento        String?   @db.VarChar(155)
+  picture            String?   @db.VarChar(255)
+  gender             String?   @db.Char(1)
+  device             String?   @db.VarChar(100)
+  createdAt          DateTime  @default(now()) @map("created_at")
+  updatedAt          DateTime? @updatedAt @map("updated_at")
+  deletedAt          DateTime? @map("deleted_at")
+
+  city City?  @relation(fields: [cityId], references: [id])
+  User User[]
+
+  @@map("person")
+}
+model User {
+  id                        Int        @id @default(autoincrement())
+  personId                  Int        @map("person_id")
+  homeScreen                HomeScreen @default(schedule) @map("home_screen")
+  isMaster                  Boolean?   @map("is_master")
+  username                  String     @db.VarChar(255)
+  sourceSystem              Int?       @map("source_system") /* Valores Permitidos: 1|null - Easy Health, 2 - Gestão de Farmácias, 3 - Easy Patient */
+  versionV1                 String?    @map("version_v1") @db.VarChar(30)
+  versionV1UpdatedAt        DateTime?  @map("version_v1_updated_at")
+  versionV2                 String?    @map("version_v2") @db.VarChar(30)
+  versionV2UpdatedAt        DateTime?  @map("version_v2_updated_at")
+  password                  String     @db.VarChar(2000)
+  language                  String     @default("en") @db.VarChar(6)
+  type                      Int?
+  verificationCode          String?    @map("verification_code") @db.VarChar(32)
+  verificationCodeExpiresAt DateTime?  @map("verification_code_expires_at")
+  pwdResetTokenHash         String?    @map("pwd_reset_token_hash") @db.VarChar(255)
+  pwdTokenExpiresAt         DateTime?  @map("pwd_token_expires_at")
+  firstLogin                Boolean?   @map("first_login")
+  verifyImporter            Boolean    @default(false) @map("verify_importer")
+  verifiedAt                DateTime?  @map("verified_at")
+  stamp                     String?    @db.VarChar(2000)
+  registrationCompleted     Boolean    @default(false) @map("registration_completed")
+  treatmentPronoun          String?    @map("treatment_pronoun") @db.VarChar(255)
+  createdAt                 DateTime   @default(now()) @map("created_at")
+  updatedAt                 DateTime?  @updatedAt @map("updated_at")
+  deletedAt                 DateTime?  @map("deleted_at")
+
+  person Person @relation(fields: [personId], references: [id])
+
+  @@index([username], name: "idx_username")
+  @@map("user")
 }
