@@ -18,7 +18,12 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "docker:restart": "npm run docker:down && npm run docker:up",
+    "docker:logs": "docker logs -f nest_mysql",
+    "docker:ps": "docker ps"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
