@@ -1,6 +1,25 @@
-import { Body, ConflictException, Controller, HttpCode, Post } from '@nestjs/common';
+import { Body, ConflictException, Controller, HttpCode, Post, UsePipes } from '@nestjs/common';
 import { hashSync } from 'bcryptjs';
+import { ZodValidationPipe } from 'src/pipes/zod-validation.pipe';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { z } from 'zod';
+
+const _createAccountBodySchema = z.object({
+  name: z.string().min(1),
+  email: z.string().email(),
+  password: z.string().min(6),
+  birth_date: z
+    .string()
+    .refine((date) => /^\d{4}-\d{2}-\d{2}$/.test(date), {
+      message: 'birth_date must be in the format YYYY-MM-DD'
+    })
+    .refine((date) => !isNaN(new Date(date).getTime()), {
+      message: 'birth_date must be a valid date'
+    }),
+  gender: z.enum(['m', 'f'])
+});
+
+type CreateAccountBodySchema = z.infer<typeof _createAccountBodySchema>;
 
 @Controller('account-create')
 export class CreateAccountController {
@@ -11,9 +30,10 @@ export class CreateAccountController {
 
   @Post()
   @HttpCode(201)
-  async handle(@Body() body: any): Promise<void> {
+  @UsePipes(new ZodValidationPipe(_createAccountBodySchema))
+  async handle(@Body() body: CreateAccountBodySchema): Promise<void> {
 
-    const { name, email, password } = body;
+    const { email, password } = body;
 
     const userWithSameEmail = await this.prisma.user.findFirst({
       where: {

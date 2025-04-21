@@ -88,7 +88,7 @@ export default tseslint.config(
       'prefer-const': 'warn',
       'eqeqeq': ['error', 'always'],
       'no-fallthrough': 'error',
-      '@typescript-eslint/consistent-type-imports': 'error',
+      '@typescript-eslint/consistent-type-imports': 'off',
       'import/order': [
         'warn',
         {
