@@ -1,6 +1,5 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
 }
 
 datasource db {
@@ -83,7 +82,7 @@ model User {
   versionV2                 String?    @map("version_v2") @db.VarChar(30)
   versionV2UpdatedAt        DateTime?  @map("version_v2_updated_at")
   password                  String     @db.VarChar(2000)
-  language                  String     @default("en") @db.VarChar(6)
+  language                  String     @default("pt-br") @db.VarChar(6)
   type                      Int?
   verificationCode          String?    @map("verification_code") @db.VarChar(32)
   verificationCodeExpiresAt DateTime?  @map("verification_code_expires_at")

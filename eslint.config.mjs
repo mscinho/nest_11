@@ -7,7 +7,7 @@ import * as importPlugin from 'eslint-plugin-import';
 
 export default tseslint.config(
   {
-    ignores: ['eslint.config.mjs'],
+    ignores: ['eslint.config.mjs', 'node_modules/**', 'dist/**'],
   },
   eslint.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
@@ -38,12 +38,6 @@ export default tseslint.config(
       '@typescript-eslint/no-unsafe-assignment': 'warn',
       '@typescript-eslint/no-unsafe-call': 'warn',
       '@typescript-eslint/no-unsafe-member-access': 'warn',
-      '@typescript-eslint/explicit-member-accessibility': [
-        'error',
-        {
-          accessibility: 'explicit',
-        },
-      ],
       '@typescript-eslint/typedef': [
         'error',
         {
@@ -59,11 +53,6 @@ export default tseslint.config(
           allowHigherOrderFunctions: true,
         },
       ],
-    },
-  },
-  // 💅 Regras de estilo e organização
-  {
-    rules: {
       '@typescript-eslint/no-unused-vars': [
         'warn',
         {
@@ -91,6 +80,10 @@ export default tseslint.config(
           functions: 'never',
         },
       ],
+      'semi': ['error', 'always'], // Exige ponto e vírgula no final das linhas
+      'eol-last': ['error', 'never'], // Não permite linha em branco no final do arquivo
+      'prettier/prettier': 'off',
+      'quotes': ['error', 'single'],
       'no-console': ['warn', { allow: ['warn', 'error'] }],
       'prefer-const': 'warn',
       'eqeqeq': ['error', 'always'],
