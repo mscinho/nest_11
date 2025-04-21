@@ -33,7 +33,7 @@ export class CreateAccountController {
   @UsePipes(new ZodValidationPipe(_createAccountBodySchema))
   async handle(@Body() body: CreateAccountBodySchema): Promise<void> {
 
-    const { email, password } = body;
+    const { email, password, birth_date, gender, name } = body;
 
     const userWithSameEmail = await this.prisma.user.findFirst({
       where: {
@@ -51,6 +51,21 @@ export class CreateAccountController {
     }
 
     const hashedPassword = hashSync(password);
+
+    await this.prisma.user.create({
+      data: {
+        username: email,
+        password: hashedPassword,
+        person: {
+          create: {
+            name,
+            email,
+            gender,
+            birth_date: new Date(birth_date)
+          }
+        }
+      }
+    });
 
   }
 
