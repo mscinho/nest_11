@@ -82,6 +82,7 @@ export default tseslint.config(
       ],
       'semi': ['error', 'always'], // Exige ponto e vírgula no final das linhas
       'eol-last': ['error', 'never'], // Não permite linha em branco no final do arquivo
+      'object-curly-spacing': ['warn', 'always'], // Exige espaço dentro das chaves
       'prettier/prettier': 'off',
       'quotes': ['error', 'single'],
       'no-console': ['warn', { allow: ['warn', 'error'] }],
