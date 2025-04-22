@@ -1,6 +1,5 @@
 // @ts-check
 import eslint from '@eslint/js';
-import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 import * as importPlugin from 'eslint-plugin-import';
@@ -11,7 +10,6 @@ export default tseslint.config(
   },
   eslint.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
-  eslintPluginPrettierRecommended,
   {
     plugins: {
       import: importPlugin
@@ -83,7 +81,6 @@ export default tseslint.config(
       'semi': ['error', 'always'], // Exige ponto e vírgula no final das linhas
       'eol-last': ['error', 'never'], // Não permite linha em branco no final do arquivo
       'object-curly-spacing': ['warn', 'always'], // Exige espaço dentro das chaves
-      'prettier/prettier': 'off',
       'quotes': ['error', 'single'],
       'no-console': ['warn', { allow: ['warn', 'error'] }],
       'prefer-const': 'warn',
